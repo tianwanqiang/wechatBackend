@@ -38,9 +38,9 @@ public class SignCheck {
             if (userId != null) {
                 Users user = new Users();
                 if (user != null) {
-                    seesion = user.getSessionId();//TODO
-                    requestMap.put(Nodes.accountType, user.getAccountType().toString());
-                    requestMap.put(Nodes.openId, user.getOpenId());//TODO
+                    seesion = "";//TODO user.getSessionId()
+                    requestMap.put(Nodes.accountType, "user.getAccountType()".toString());
+                    requestMap.put(Nodes.openId, "user.getOpenId()");//TODO
                 } else {
                     resHeader.put(Nodes.retCode, Constants.RET_CODE_LOGINED_USER_NOT_EXIST);
                     return resHeader;
@@ -68,7 +68,7 @@ public class SignCheck {
     }
 
     public String getSignString(String rpid, String session, Map<String, String> data) {
-        CSLog.debugRPID_In(logger, rpid, "【签名校验】userId={},session={}", data.get(Node.userId), session);
+        CSLog.debugRPID_In(logger, rpid, "【签名校验】userId={},session={}", data.get(Nodes.userId), session);
         Collection<String> values = data.values();
         String[] signArray = values.toArray(new String[values.size()]);
         if (APPKEY == null) {
