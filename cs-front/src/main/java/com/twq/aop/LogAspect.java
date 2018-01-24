@@ -59,46 +59,6 @@ public class LogAspect {
         request.setAttribute(Nodes.rpid, rpid);
 
 
-        //TODO 签名校验
-        //(2)签名校验
-        try {
-            request.setCharacterEncoding("UTF8");
-            reader = request.getReader();
-            jsonHttpBody = new StringBuffer();
-            while ((line = reader.readLine()) != null) {
-                jsonHttpBody.append(line);
-            }
-            reader.close();
-            //(0)请求包体转为Map格式
-            reqMsg = Conversion.convertJson2Map(jsonHttpBody.toString());
-            apiId = reqMsg.get(Nodes.apiId);
-            if (!log_ignore_api.contains(apiId)) {//TODO 日志忽略接口
-                CSLog.infoRPID_Start(logger, rpid, "收到的请求：{}", jsonHttpBody.toString());
-            }
-
-            userId = reqMsg.get(Nodes.userId);
-            //(1)字段个数校验，返回缺失字段名
-
-//            if (!ckResult.getRetCode().equals(Constants.RET_CODE_SUCCESSFUL)) {
-//                resp = new ResMsg(ckResult);
-//                throw new CustomException(ckResult.getRetMsg());
-//            }
-
-            //(2)签名校验
-            Map<String, String> ckResult = signCheck.check(rpid, reqMsg);
-//            if (!ckResult.getRetCode().equals(Constants.RET_CODE_SUCCESSFUL)) {
-//                resp = new ResMsg(ckResult);
-//                throw new CustomException(ckResult.getRetMsg());
-//            }
-            if (!ckResult.get(Nodes.retCode).equals(Constants.RET_CODE_SUCCESSFUL)) {
-//                throw new CustomException(ckResult.get(Nodes.retMsg));
-            }
-
-            //(3)开启流程
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
