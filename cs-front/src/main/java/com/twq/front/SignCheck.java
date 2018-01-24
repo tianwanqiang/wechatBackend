@@ -29,7 +29,7 @@ public class SignCheck {
 
         Map<String, String> resHeader = new HashMap<>();
         if (requestMap.containsKey(Nodes.sign)) {
-            String userId = requestMap.get(Nodes.);
+            String userId = requestMap.get(Nodes.userId);
             String clientSign = requestMap.get(Nodes.sign);
             String seesion = "";
             Map<String, String> data = new HashMap<String, String>();
@@ -42,7 +42,7 @@ public class SignCheck {
                     requestMap.put(Nodes.accountType, user.getAccountType().toString());
                     requestMap.put(Nodes.openId, user.getOpenId());//TODO
                 } else {
-                    resHeader.put(Nodes.Retcode, Constants.RET_CODE_LOGINED_USER_NOT_EXIST);
+                    resHeader.put(Nodes.retCode, Constants.RET_CODE_LOGINED_USER_NOT_EXIST);
                     return resHeader;
                 }
             }
@@ -54,14 +54,17 @@ public class SignCheck {
 
             String sign = genSign(signString);//生成服务端签名
             if (!clientSign.equals(sign)) {//签名校验不通过
-//                resHeader.put(Nodes.Retcode, Nodes.sign);
+                resHeader.put(Nodes.retCode, "");//TODO
                 CSLog.debugRPID_In(logger, rpid, "【签名校验】接口{}签名校验未通过.", requestMap.get(Nodes.apiId));
             } else {
+                resHeader.put(Nodes.retCode, "");//TODO
                 CSLog.debugRPID_In(logger, rpid, "【签名校验】接口{}签名校验通过.", requestMap.get(Nodes.apiId));
+
             }
         } else {
 
         }
+        return resHeader;
     }
 
     public String getSignString(String rpid, String session, Map<String, String> data) {

@@ -5,6 +5,8 @@ package com.twq.util;
  */
 public class Constants {
 
+    public static final String RET_CODE_SUCCESSFUL = "0";
+
     //错误码
     public static String RET_CODE_LOGINED_USER_NOT_EXIST = "-999";//用户不存在
 

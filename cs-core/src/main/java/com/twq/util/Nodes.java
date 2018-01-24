@@ -17,5 +17,9 @@ public class Nodes {
 
     public static String accountType = "accountType";//账户类型
 
-    public static String Retcode = "ret_code";//返回码
+    public static String retCode = "retCode";//返回码
+
+    public static String retMsg = "retMsg";//返回消息
+
+    public static String rpid = "rpid";
 }
