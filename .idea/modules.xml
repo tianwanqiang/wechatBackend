@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../csbackend/cs-dao/cs-dao.iml" filepath="$PROJECT_DIR$/../csbackend/cs-dao/cs-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../csbackend/cs-core/cs-core.iml" filepath="$PROJECT_DIR$/../csbackend/cs-core/cs-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cs-dao/cs-dao.iml" filepath="$PROJECT_DIR$/cs-dao/cs-dao.iml" />
       <module fileurl="file://$PROJECT_DIR$/cs-front/cs-front.iml" filepath="$PROJECT_DIR$/cs-front/cs-front.iml" />
       <module fileurl="file://$PROJECT_DIR$/csbackend.iml" filepath="$PROJECT_DIR$/csbackend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../csbackend/demo/demo.iml" filepath="$PROJECT_DIR$/../csbackend/demo/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
     </modules>
   </component>
 </project>

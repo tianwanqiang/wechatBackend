@@ -4,7 +4,6 @@ import com.alibaba.druid.support.json.JSONUtils;
 import com.twq.dao.mapper.UsersMapper;
 import com.twq.dao.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
