@@ -17,7 +17,6 @@
       <module name="cs-dao" target="1.8" />
       <module name="cs-front" target="1.8" />
       <module name="csbackend" target="1.8" />
-      <module name="demo" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
