@@ -48,16 +48,13 @@ public class SignCheck {
             }
 
             String signString = getSignString(rpid, seesion, data);//生成客户端签名字符串
-//            if (!"8017".equals(requestMap.get(Nodes.apiId))) {
-//                CSLog.debugRPID_In(LOGGER, rpid, "【签名校验】signString={}", signString);
-//            }
 
             String sign = genSign(signString);//生成服务端签名
             if (!clientSign.equals(sign)) {//签名校验不通过
-                resHeader.put(Nodes.retCode, "");//TODO
+                resHeader.put(Nodes.retCode, Constants.RET_CODE_AUTO_ERROR);//TODO
                 CSLog.debugRPID_In(logger, rpid, "【签名校验】接口{}签名校验未通过.", requestMap.get(Nodes.apiId));
             } else {
-                resHeader.put(Nodes.retCode, "");//TODO
+                resHeader.put(Nodes.retCode, Constants.RET_CODE_SUCCESSFUL);//TODO
                 CSLog.debugRPID_In(logger, rpid, "【签名校验】接口{}签名校验通过.", requestMap.get(Nodes.apiId));
 
             }
