@@ -19,8 +19,14 @@ public class Conversion {
      * @return
      */
     public static Map convertJson2Map(String jsonString) {
-        Map<String, String> map = JSON.parseObject(jsonString, new TypeReference<Map<String, String>>() {
-        });
+
+        Map<String, String> map = null;
+        try {
+            map = JSON.parseObject(jsonString, new TypeReference<Map<String, String>>() {
+            });
+        } catch (Exception e) {
+            CSLog.debug("json转换异常=====》{}", jsonString);
+        }
         return map;
     }
 

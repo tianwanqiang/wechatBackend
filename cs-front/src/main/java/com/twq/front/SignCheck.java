@@ -1,6 +1,8 @@
 package com.twq.front;
 
 import com.twq.dao.model.Users;
+import com.twq.service.ConfigService;
+import com.twq.service.UsersService;
 import com.twq.util.CSLog;
 import com.twq.util.Constants;
 import com.twq.util.Nodes;
@@ -9,6 +11,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,7 +23,10 @@ import java.util.Map;
 @Service
 public class SignCheck {
 
-
+    @Resource
+    private UsersService userService;
+    @Resource
+    private ConfigService configService;
     private static String APPKEY;
 
     private final Logger logger = CSLog.get(this.getClass());
@@ -36,11 +42,11 @@ public class SignCheck {
             data.putAll(requestMap);
             data.remove(Nodes.sign);
             if (userId != null) {
-                Users user = new Users();
+                Users user = userService.getUserById(userId);
                 if (user != null) {
-                    seesion = "";//TODO user.getSessionId()
-                    requestMap.put(Nodes.accountType, "user.getAccountType()".toString());
-                    requestMap.put(Nodes.openId, "user.getOpenId()");//TODO
+                    seesion = user.getSessionId();
+                    requestMap.put(Nodes.accountType, user.getAccountType().toString());
+                    requestMap.put(Nodes.openId, user.getWechatId());
                 } else {
                     resHeader.put(Nodes.retCode, Constants.RET_CODE_LOGINED_USER_NOT_EXIST);
                     return resHeader;
@@ -51,7 +57,7 @@ public class SignCheck {
 
             String sign = genSign(signString);//生成服务端签名
             if (!clientSign.equals(sign)) {//签名校验不通过
-                resHeader.put(Nodes.retCode, Constants.RET_CODE_AUTO_ERROR);//TODO
+                resHeader.put(Nodes.retCode, Constants.RET_CODE_AUTO_ERROR);
                 CSLog.debugRPID_In(logger, rpid, "【签名校验】接口{}签名校验未通过.", requestMap.get(Nodes.apiId));
             } else {
                 resHeader.put(Nodes.retCode, Constants.RET_CODE_SUCCESSFUL);//TODO
@@ -69,7 +75,7 @@ public class SignCheck {
         Collection<String> values = data.values();
         String[] signArray = values.toArray(new String[values.size()]);
         if (APPKEY == null) {
-//            APPKEY = configService.getPlatParameters().get(DBConstants.APP_KEY); TODO
+            APPKEY = configService.getPlatParameters().get(Nodes.appKey);
         }
         String afterBody = session + APPKEY;
         String SignString;

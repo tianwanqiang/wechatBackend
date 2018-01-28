@@ -12,6 +12,7 @@
         <module>cs-dao</module>
         <module>cs-front</module>
         <module>cs-core</module>
+        <module>cs-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

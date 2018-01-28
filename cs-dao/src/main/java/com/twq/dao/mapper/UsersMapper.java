@@ -2,10 +2,8 @@ package com.twq.dao.mapper;
 
 import com.twq.dao.model.Users;
 import com.twq.dao.model.UsersExample;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface UsersMapper {
     /**

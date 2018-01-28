@@ -13,4 +13,14 @@ public class Constants {
     //签名验证未通过
     public static String RET_CODE_AUTO_ERROR = "500";
 
+
+    //--------系统参数key---------------------
+    public static String PARAM_TYPE_SYS = "sys";
+
+
+    //------数据库常量----------
+    public static Integer GENDER_MALE = 1;//男
+    public static Integer GENDER_FEMALE = 0;//女
+
+
 }

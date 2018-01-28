@@ -9,6 +9,7 @@
         <module name="cs-core" />
         <module name="cs-dao" />
         <module name="cs-front" />
+        <module name="cs-service" />
         <module name="demo" />
       </profile>
     </annotationProcessing>
@@ -16,6 +17,7 @@
       <module name="cs-core" target="1.8" />
       <module name="cs-dao" target="1.8" />
       <module name="cs-front" target="1.8" />
+      <module name="cs-service" target="1.8" />
       <module name="csbackend" target="1.8" />
     </bytecodeTargetLevel>
   </component>
