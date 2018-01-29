@@ -49,4 +49,7 @@ public class Constants {
     public final static Properties apiMapperInstans = PropertiesUtils.getApiMapperInstans();
 
 
+    public static final String API_LOGIN_ID = "8002";
+
+
 }

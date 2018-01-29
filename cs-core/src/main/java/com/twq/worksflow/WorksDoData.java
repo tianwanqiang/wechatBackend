@@ -1,9 +1,9 @@
 package com.twq.worksflow;
 
-import com.chushou.platform.exception.CustomException;
-import com.chushou.platform.utils.CSLog;
-import com.chushou.platform.utils.Constants;
-import com.chushou.platform.utils.Node;
+import com.twq.exception.CustomException;
+import com.twq.util.CSLog;
+import com.twq.util.Constants;
+import com.twq.util.Nodes;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class WorksDoData  {
     private Map<String,Object> globalData ;
 
     public WorksDoData(Map<String,String> inData) {
-        this.rpid = inData.get(Node.rpid);
+        this.rpid = inData.get(Nodes.rpid);
         this.inData = inData;
         setGlobalData(inData) ;
     }

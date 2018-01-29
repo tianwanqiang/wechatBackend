@@ -1,5 +1,7 @@
-package com.twq.business;
+package com.twq.business.platform;
 
+
+import com.twq.business.util.SpringUtil;
 import com.twq.exception.CustomException;
 import com.twq.util.CSLog;
 import com.twq.util.Constants;
@@ -14,15 +16,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * Created by twq on 2018/1/29.
+ */
+
 @Service
 public class SimpleWorksController implements WorksController {
-
     private static Logger LOGGER = CSLog.get();
 
+    //每个流程在xml配置
     @Override
-    public WorksRetData doFlow(Map<String, String> reqMsg) throws Exception {
+    public WorksRetData doFlow(Map<String, String> reqMsg) {
         String apiId = reqMsg.get(Nodes.apiId);
-        String flowId = Constants.apiMapperInstans.getProperty("remote_" + apiId);
+        String flowId = Constants.apiMapperInstans.getProperty("twq_" + apiId);
         Map<String, String> gc = reqMsg;
         WorksDoData doData = null;
         WorksRetData retData = new WorksRetData();
@@ -30,7 +36,7 @@ public class SimpleWorksController implements WorksController {
             if (flowId == null) {
                 throw new IllegalArgumentException();
             }
-            Object worksGroup = SpringUtil.getBean(flowId);//TODO
+            Object worksGroup = SpringUtil.getBean(flowId);
             CSLog.debugRPID_In(LOGGER, reqMsg.get(Nodes.rpid), "==>搜索到流程:【{}】", flowId);
             doData = ((WorksGroup) worksGroup).startingWorks(gc);
             //对执行结果进行转换

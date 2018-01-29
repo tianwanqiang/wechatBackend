@@ -1,6 +1,8 @@
 package com.twq.api;
 
+import com.alibaba.fastjson.JSON;
 import com.twq.exception.CustomException;
+import com.twq.securiy.CheckSign;
 import com.twq.util.*;
 import com.twq.worksflow.WorksController;
 import com.twq.worksflow.WorksRetData;
@@ -114,7 +116,16 @@ public class CloudSportApi implements ApiRestService {
             CSLog.errorRPID(LOGGER, rpid, "{}", e.getMessage());
             e.printStackTrace();
             resp = new ResMsg(Constants.RET_CODE_SYSTEM_ERROR);
+        } finally {
+            String ret = JSON.toJSONString(resp);
+            String retCode = "N/A" ;
+            String retMsg  = "N/A" ;
+            if(resp!=null&&resp.getResult()!=null){
+                retCode = resp.getResult().getRetCode() ;
+                retMsg  = resp.getResult().getRetMsg() ;
+            }
+            CSLog.infoMpsp("{},{},{},{},{},{}",rpid,apiId,retCode,userId,retMsg,System.currentTimeMillis()-now);
+            return ret ;
         }
-        return null;
     }
 }
