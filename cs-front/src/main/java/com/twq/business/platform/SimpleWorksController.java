@@ -28,7 +28,7 @@ public class SimpleWorksController implements WorksController {
     @Override
     public WorksRetData doFlow(Map<String, String> reqMsg) {
         String apiId = reqMsg.get(Nodes.apiId);
-        String flowId = Constants.apiMapperInstans.getProperty("twq_" + apiId);
+        String flowId = Constants.apiMapperInstans.getProperty("remote_" + apiId);
         Map<String, String> gc = reqMsg;
         WorksDoData doData = null;
         WorksRetData retData = new WorksRetData();

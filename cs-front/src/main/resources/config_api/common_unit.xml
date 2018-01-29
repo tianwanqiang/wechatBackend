@@ -1,8 +1,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-    <bean id="simpleOutUnit" class="com.twq.c.business.works.common.OutUnit"/>
-
-
+    <bean id="simpleOutUnit" class="com.twq.business.works.common.OutUnit"/>
+    <bean id="findUserInfo" class="com.twq.business.works.common.FindUserInfo"/>
+    <import resource="find_userinfo.xml"/>
 </beans>

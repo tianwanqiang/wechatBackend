@@ -9,7 +9,7 @@ import java.util.Map;
 public class SignUtils {
     private final Logger LOGGER = CSLog.get();
 
-    public static void sign(Map<String, String> param) {
+    public static String sign(Map<String, String> param) {
         for (Map.Entry<String, String> entry : param.entrySet()) {
             CSLog.info("key={} and value= ", entry.getKey(), entry.getValue());
         }
@@ -23,6 +23,7 @@ public class SignUtils {
         String sign = DigestUtils.md5Hex(signStr);
         CSLog.info("signStr:{}", signStr);
         param.put("sign", sign);
+        return sign;
     }
 
 }

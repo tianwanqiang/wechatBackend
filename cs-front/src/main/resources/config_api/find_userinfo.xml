@@ -1,0 +1,14 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:service="http://www.mikiyun.com/schema/cs-works-2.0"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                        http://www.mikiyun.com/schema/cs-works-2.0 http://www.mikiyun.com/schema/cs-works-2.0.xsd">
+    <!--返回查询结果-->
+    <bean id="work004_outUnit" class="com.twq.business.works.usersinfo.OutUnit"/>
+    <service:api id="work004" desc="用户信息查询">
+        <service:unit ref="findUserInfo" desc="返回用户信息"/>
+        <service:unit ref="work004_outUnit" desc="返回用户信息"/>
+    </service:api>
+
+
+</beans>

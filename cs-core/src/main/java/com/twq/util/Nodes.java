@@ -21,5 +21,6 @@ public class Nodes {
     public static final String clientIp = "clientIp";
     public static final String BODY = "BODY";
     public static final String ITEMS = "ITEMS";
+    public static final String USER = "USER";
 
 }

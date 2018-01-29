@@ -20,6 +20,11 @@ public class TestApi extends TestCase {
     String session = "NZc2uEvTD0UtUOB4hGQxibrZo1ZMzPyU";
     String appKey = testAppKey;
 
+    private void initLocalEnv() {
+        appKey = testAppKey;
+        setUrl(localIP);
+    }
+
     Map<String, String> genParam() {
         Map<String, String> param = new HashMap<String, String>();
         param.put("appKey", appKey);
@@ -27,8 +32,9 @@ public class TestApi extends TestCase {
         return param;
     }
 
-    private void setUrl(String ip_port, String requestUrl) {
-        callingApi = ip_port + requestUrl;
+
+    private void setUrl(String ip_port) {
+        callingApi = ip_port + "/api/calling";
     }
 
     String callingApi = null;
@@ -39,12 +45,16 @@ public class TestApi extends TestCase {
         return genParam();
     }
 
-    public void testCallingApiIndex() {
-        Map<String, String> param = setTestLocalEnv("hqV3015hY2hasrjvSCq6RgLNJ6zK5Lt2");//这一步之后，param里就会有 session，appkey
-        param.put("userId", "10001");
-        param.put(Nodes.apiId, "123");
-        SignUtils.sign(param);//这一步之后，param 里就会有sign
-        setUrl(localIP, "/index/hello");
+    public void testCallingApi_8004() {
+        initLocalEnv();
+        Map<String, String> param = new HashMap<String, String>();
+        param.put(Nodes.userId, "800001");
+        param.put(Nodes.apiId, "8004");
+        String token = "e41dec09d0c34068baedd562ac9b82b9";
+        param.put(Nodes.token, token);
+        String signature = SignUtils.sign(param);
+        System.out.println(signature);
         HttpClientUtil.doPostJson(callingApi, JSON.toJSONString(param));
     }
+
 }
