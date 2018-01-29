@@ -1,4 +1,4 @@
-package com.twq.api.msg;
+package com.twq.worksflow.msg;
 
 
 import com.twq.util.Constants;
@@ -17,7 +17,7 @@ public class ResHeader implements Serializable {
 
 	public ResHeader(String retCode) {
 		this.retCode = retCode;
-		this.retMsg  =  PropertiesUtils.getRetMapperInstans().getProperty(this.retCode);
+		this.retMsg  = PropertiesUtils.getRetMapperInstans().getProperty(this.retCode);
 	}
 	public ResHeader(String retCode,String retMsg) {
 		this.retCode = retCode;

@@ -1,4 +1,4 @@
-package com.twq.api.msg;
+package com.twq.worksflow.msg;
 
 import java.io.Serializable;
 import java.util.ArrayList;
