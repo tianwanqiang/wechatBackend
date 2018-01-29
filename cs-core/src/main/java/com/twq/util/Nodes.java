@@ -22,4 +22,7 @@ public class Nodes {
     public static String retMsg = "retMsg";//返回消息
 
     public static String rpid = "rpid";
+
+
+    public static final String log_ignore_api = "log_ignore_api";//忽略日志api
 }
