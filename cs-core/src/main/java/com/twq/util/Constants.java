@@ -8,7 +8,6 @@ import java.util.Properties;
 public class Constants {
 
 
-
     //错误码
     public static final String RET_CODE_SUCCESSFUL = "0";
     public static final String RET_CODE_HEADER_NOT_ENOUGH = "-1";
@@ -44,10 +43,12 @@ public class Constants {
     //------数据库常量----------
     public static Integer GENDER_MALE = 1;//男
     public static Integer GENDER_FEMALE = 0;//女
-
+    //---配置文件---------------
     public final static Properties apiFieldsProperties = PropertiesUtils.getApiFieldsMapperInstans();
     public final static Properties apiMapperInstans = PropertiesUtils.getApiMapperInstans();
-
+    //-----工作流------
+    public static final String works_group_class = "works_group_class";
+    public static final String condition_group_class = "condition_group_class";
 
     public static final String API_LOGIN_ID = "8002";
 

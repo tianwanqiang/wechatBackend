@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.chushou.me/schema/chushou-works-2.0"
+            targetNamespace="http://www.chushou.me/schema/chushou-works-2.0"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+            version="1.0">
+    <xsd:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"/>
+    <xsd:element name="api">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                        <xsd:element ref="unit" minOccurs="0" maxOccurs="unbounded"/>
+                        <xsd:element ref="cond" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:choice>
+                    <xsd:attribute name="desc" type="xsd:string"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="unit">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:attribute name="class" type="xsd:string"/>
+                    <xsd:attribute name="ref"   type="xsd:string"/>
+                    <xsd:attribute name="desc"  type="xsd:string"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="cond">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                        <xsd:element ref="cond" minOccurs="0" maxOccurs="unbounded"/>
+                        <xsd:group ref="limitedType" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:choice>
+                    <xsd:attribute name="condExpression" type="xsd:string"/>
+                    <xsd:attribute name="desc"  type="xsd:string"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:group name="limitedType">
+        <xsd:sequence>
+            <xsd:choice minOccurs="1" maxOccurs="unbounded">
+                <xsd:element ref="unit" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="beans:bean"/>
+                <xsd:element ref="beans:ref"/>
+                <xsd:element ref="beans:idref"/>
+                <xsd:element ref="beans:value"/>
+                <xsd:any minOccurs="0"/>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:group>
+</xsd:schema>
