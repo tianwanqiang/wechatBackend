@@ -5,13 +5,16 @@ package com.twq.util;
  */
 public class Constants {
 
-    public static final String RET_CODE_SUCCESSFUL = "0";
+
 
     //错误码
-    public static String RET_CODE_LOGINED_USER_NOT_EXIST = "-999";//用户不存在
+    public static final String RET_CODE_SUCCESSFUL = "0";
+    public static final String RET_CODE_LOGINED_USER_NOT_EXIST = "-1";//用户不存在
+    public static final String RET_CODE_AUTO_ERROR = "-2"; //签名验证未通过
+    public static final String RET_CODE_SYSTEM_ERROR = "-999";//系统错误
 
-    //签名验证未通过
-    public static String RET_CODE_AUTO_ERROR = "500";
+
+
 
 
     //--------系统参数key---------------------

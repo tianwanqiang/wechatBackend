@@ -1,11 +1,9 @@
 package com.twq.api;
 
 import com.twq.api.msg.ResMsg;
+import com.twq.exception.CustomException;
 import com.twq.server.ApiRestService;
-import com.twq.util.CSLog;
-import com.twq.util.Nodes;
-import com.twq.util.PropertiesUtils;
-import com.twq.util.SerialUtil;
+import com.twq.util.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -45,6 +44,28 @@ public class CloudSportApi implements ApiRestService {
         Map<String, String> reqMsg;
         ResMsg resp = null;
         String log_ignore_api = PropertiesUtils.getDynpropsMapperInstans().getProperty(Nodes.log_ignore_api);
+
+        try {
+            request.setCharacterEncoding("utf-8");
+            reader       = request.getReader();
+            jsonHttpBody = new StringBuffer();
+            while ((line = reader.readLine()) != null) {
+                jsonHttpBody.append(line);
+            }
+            reader.close();
+        } catch (CustomException e) {
+            e.printStackTrace();
+            CSLog.errorRPID(LOGGER, rpid, "{}", e.getMessage());
+            resp = new ResMsg(e.getRetCode());
+        }catch (IOException e) {
+            CSLog.errorRPID(LOGGER,rpid,"{}",e.getMessage());
+            e.printStackTrace();
+            resp = new ResMsg(Constants.RET_CODE_SYSTEM_ERROR);
+        }catch (Exception e) {
+            CSLog.errorRPID(LOGGER,rpid,"{}",e.getMessage());
+            e.printStackTrace();
+            resp = new ResMsg(Constants.RET_CODE_SYSTEM_ERROR);
+        }
         return null;
     }
 }
