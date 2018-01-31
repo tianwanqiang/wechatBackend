@@ -13,7 +13,6 @@ public class TestApi extends TestCase {
 
     String localIP = "http://127.0.0.1:8080";//= "http://api.teabest.com" ;
     String testIP = "http://apitest.51findme.com";
-    //http://staging.51findme.com/services/transaction/payNotice
     String prdIP = "https://api.51findme.com";
     String testAppKey = "mImPJVmkkAjM1lYOvdInFw++";
     String prdAppKey = "s1nGV1VoRm38+8549QJk";

@@ -1,5 +1,7 @@
 package com.twq.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -14,6 +16,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class HttpClientUtil {
 
@@ -25,6 +28,16 @@ public class HttpClientUtil {
         HttpPost post = new HttpPost(reqUrl);
         StringEntity myEntity = new StringEntity(bodyJsonData, ContentType.APPLICATION_JSON);
         post.setEntity(myEntity);      // 设置请求
+        Map<String, String> map = JSON.parseObject(bodyJsonData, new TypeReference<Map<String, String>>() {
+
+        });
+        String userId = map.get(Nodes.userId);
+        String apiId = map.get(Nodes.apiId);
+        String token = map.get(Nodes.token);
+        String signature = map.get(Nodes.signature);
+        post.setHeader(Nodes.token, token);
+        post.setHeader(Nodes.userId, userId);
+        post.setHeader(Nodes.signature, signature);
         String responseContent = null; // 响应内容
         CloseableHttpResponse response = null;
         try {
