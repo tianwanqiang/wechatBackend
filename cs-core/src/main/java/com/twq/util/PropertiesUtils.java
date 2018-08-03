@@ -31,6 +31,7 @@ public class PropertiesUtils {
         return PROPERTIES_API_MAPPER;
     }
 
+
     public static Properties initProperties(Properties p, String filePath) {
         if (p != null)
             return p;
@@ -51,4 +52,5 @@ public class PropertiesUtils {
         }
         return p;
     }
+
 }

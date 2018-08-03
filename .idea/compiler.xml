@@ -11,6 +11,7 @@
         <module name="cs-front" />
         <module name="cs-service" />
         <module name="demo" />
+        <module name="schedule" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -19,6 +20,7 @@
       <module name="cs-front" target="1.8" />
       <module name="cs-service" target="1.8" />
       <module name="csbackend" target="1.8" />
+      <module name="schedule" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -6,7 +6,6 @@ package com.twq.util;
 public class Nodes {
 
     public static String signature = "signature";
-    public static String appKey = "appKey";
     public static String userId = "userId";
     public static String apiId = "apiId";
     public static String openId = "openId";
@@ -22,5 +21,16 @@ public class Nodes {
     public static final String BODY = "BODY";
     public static final String ITEMS = "ITEMS";
     public static final String USER = "USER";
+
+    public static final String CONTENT = "content";
+    public static final String SHARE_IMG = "share_img";
+    public static final String SUB_TITLE = "sub_title";
+    public static final String HOW_TO_PLAY = "how_to_play";
+    public static final String TITLE = "title";
+
+    public static final String APPSEC = "appSec";
+    public static final String APPKEY = "appKey";
+    public static final String DATA = "data";
+
 
 }

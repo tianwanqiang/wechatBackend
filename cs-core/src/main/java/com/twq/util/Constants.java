@@ -53,4 +53,11 @@ public class Constants {
     public static final String API_LOGIN_ID = "8002";
 
 
+    public static final Properties SysteConfig = null;
+
+    //是否加入打卡计划 0 否 1 是
+    public static final int IS_JOINED_FALSE = 0;
+
+    public static final int IS_JOINED_TRUE = 1;
+
 }
