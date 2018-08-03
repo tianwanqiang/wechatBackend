@@ -46,37 +46,26 @@ public class Task {
     private CustomMapper customMapper;
 
 
-    // 0 30 7 ? * *
-    //0 30 23 * * ? *
     @Scheduled(cron = "0 50 23 * * ? ")
     public void dailyAccountRunning() {
+        GamesExample gamesExample = new GamesExample();
+        String todayPartyTime = getTodayPartyTime();
 
         //每天11：50后
-        //1.如果当天所有人都没有打卡成功，则将打卡金退还用户钱包
-        String todayPartyTime = getTodayPartyTime();
-        GamesExample gamesExample = new GamesExample();
-        gamesExample.createCriteria().andPartyTimeEqualTo(todayPartyTime).andIsRecheckEqualTo(CHECKED);
-        long length = gamesMapper.countByExample(gamesExample);
-        List<Games> winners = new ArrayList<>();
+        //今日打卡成功人数
+        long length = getTodayGameLength(gamesExample, todayPartyTime);
+
+        //得到今天打卡成功数据
+
         if (length == 0) {
-            clearExample(gamesExample);
-            gamesExample.createCriteria().andPartyTimeEqualTo(todayPartyTime);
-            List<Games> allGames = gamesMapper.selectByExample(gamesExample);
-            for (Games games : allGames
-                    ) {
-                setUserWallet(games, games.getCheckMoney());
-            }
+            rollBackUserWallet(clearExample(gamesExample), todayPartyTime);
             return;
-        } else {
-            winners = gamesMapper.selectByExample(gamesExample);
         }
+
 
         //2.否则，将打卡成功用户瓜分打卡失败用户佣金
         //得到今天未打卡的游戏数据
-        clearExample(gamesExample);
-        GamesExample.Criteria where = gamesExample.createCriteria();
-        where.andPartyTimeEqualTo(todayPartyTime).andIsRecheckEqualTo(UNCHECK);
-        List<Games> failers = gamesMapper.selectByExample(gamesExample);
+        List<Games> failers = getGamesFailers(clearExample(gamesExample), todayPartyTime);
         //得到昨天瓜分奖金
         BigDecimal uncheckMoney = new BigDecimal(0);
         for (Games g :
@@ -84,37 +73,18 @@ public class Task {
             BigDecimal checkMoney = g.getCheckMoney();
             uncheckMoney.add(checkMoney);
         }
-
-        //得到今天打卡成功数据
-        int size = 0;
-        //成功打卡人数
-        size = (winners != null && winners.size() > 0) ? winners.size() : size;
         //实际瓜分总金额
         BigDecimal realMoney = uncheckMoney.multiply(RATE);
+
         //人均奖金
-        if (size <= 0) {
+        if (length <= 0) {
             logger.debug("昨日无人参与");
             return;
         }
 
-        HongBaoAlgorithm h = new HongBaoAlgorithm();
-        final HongBaoAlgorithm.HongBao hb = h.new HongBao(realMoney.doubleValue(), size);
-
-        for (Games winner : winners
-                ) {
-            //每人获取金额
-            double perAssign = hb.assignHongBao();
-            BigDecimal perGot = new BigDecimal(perAssign);
-            BigDecimal earn = perGot;//TODO 随机处理
-            winner.setReCheckmoney(earn);
-            setUserWallet(winner, earn);
-
-            GamesExample example1 = new GamesExample();
-            example1.createCriteria().andUserIdEqualTo(winner.getUserId());
-            //更新用户打卡记录
-            gamesMapper.updateByExampleSelective(winner, example1);
-        }
+        setWinnerMoney(gamesExample, todayPartyTime, (int) length, realMoney);
     }
+
 
     /**
      * 每天统计用户标签
@@ -215,8 +185,9 @@ public class Task {
     }
 
 
-    private void clearExample(GamesExample gamesExample) {
+    private GamesExample clearExample(GamesExample gamesExample) {
         gamesExample.clear();
+        return gamesExample;
     }
 
 
@@ -235,4 +206,70 @@ public class Task {
     public int getRandomInt(int length) {
         return new Random().nextInt(length);
     }
+
+    /**
+     * 设置赢着的钱包账户
+     */
+    private void setWinnerMoney(GamesExample gamesExample, String todayPartyTime, int length, BigDecimal realMoney) {
+        List<Games> winners = getGamesWinners(clearExample(gamesExample), todayPartyTime);
+        //成功打卡人数
+        int size = (winners != null && winners.size() > 0) ? length : 0;
+        HongBaoAlgorithm h = new HongBaoAlgorithm();
+        final HongBaoAlgorithm.HongBao hb = h.new HongBao(realMoney.doubleValue(), size);
+
+        for (Games winner : winners
+                ) {
+            //每人获取金额
+            double perAssign = hb.assignHongBao();
+            BigDecimal perGot = new BigDecimal(perAssign);
+            BigDecimal earn = perGot;
+            winner.setReCheckmoney(earn);
+            setUserWallet(winner, earn);
+
+            GamesExample example1 = new GamesExample();
+            example1.createCriteria().andUserIdEqualTo(winner.getUserId());
+            //更新用户打卡记录
+            gamesMapper.updateByExampleSelective(winner, example1);
+        }
+    }
+
+    private List<Games> getGamesFailers(GamesExample gamesExample, String todayPartyTime) {
+        GamesExample.Criteria where = gamesExample.createCriteria();
+        where.andPartyTimeEqualTo(todayPartyTime).andIsRecheckEqualTo(UNCHECK);
+        return gamesMapper.selectByExample(gamesExample);
+    }
+
+    /**
+     * 今日参与数据
+     */
+    private List<Games> getGamesWinners(GamesExample gamesExample, String todayPartyTime) {
+        clearExample(gamesExample).createCriteria().andPartyTimeEqualTo(todayPartyTime).andIsRecheckEqualTo(CHECKED);
+        List<Games> winners = gamesMapper.selectByExample(gamesExample);
+        return winners;
+    }
+
+    /**
+     * 回滚用户钱包
+     */
+    private void rollBackUserWallet(GamesExample gamesExample, String todayPartyTime) {
+        gamesExample.createCriteria().andPartyTimeEqualTo(todayPartyTime);
+        List<Games> allGames = gamesMapper.selectByExample(gamesExample);
+        for (Games games : allGames
+                ) {
+            setUserWallet(games, games.getCheckMoney());
+        }
+    }
+
+    /**
+     * 获取今日游戏参与者
+     *
+     * @param gamesExample
+     * @param todayPartyTime
+     * @return
+     */
+    private long getTodayGameLength(GamesExample gamesExample, String todayPartyTime) {
+        gamesExample.createCriteria().andPartyTimeEqualTo(todayPartyTime).andIsRecheckEqualTo(CHECKED);
+        return gamesMapper.countByExample(gamesExample);
+    }
+
 }
