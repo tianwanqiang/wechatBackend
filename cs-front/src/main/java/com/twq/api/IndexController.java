@@ -1,6 +1,7 @@
 package com.twq.api;
 
 import com.twq.dao.model.ContentInfo;
+import com.twq.dao.model.Games;
 import com.twq.dao.model.ProjectInfo;
 import com.twq.dao.model.Tags;
 import com.twq.service.base.*;
@@ -43,7 +44,8 @@ public class IndexController {
     private Integer joinAmount;
 
     @RequestMapping(path = "/index", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map callingApi(@RequestParam Integer project_id) {
+    public Map callingApi(@RequestParam Integer project_id, @RequestParam(value = "user_id", defaultValue = "") String userId,
+                          @RequestParam(value = "token", defaultValue = "") String token) {
         Map<String, Object> result = new HashMap<>();
         Map<String, Object> mainMap = new HashMap<>();
         Map<String, Object> contentMap = new HashMap<>();
@@ -93,6 +95,13 @@ public class IndexController {
             tags.add(earlyMap);
         }
 
+        int joinStatus = 0;
+        if (userId != null && userId != "" && token != null && token != "") {
+            List<Games> games = gameService.getTomorrowUserGameInfoByUid(userId);
+            joinStatus = games == null ? 0 : games.size() > 0 ? 1 : 0;
+        }
+
+
         mainMap.put("tags", tags);
         mainMap.put("total_count", totayGameCount);
         mainMap.put("content_json", contentMap);
@@ -101,6 +110,7 @@ public class IndexController {
         mainMap.put("project_name", project.getProjectName());
         mainMap.put("success_count", rankNumbers.get("suc_cnt"));
         mainMap.put("fail_count", rankNumbers.get("fal_cnt"));
+        mainMap.put("user_join_status", joinStatus);
         result.put("data", mainMap);
         LOGGER.debug("{},获取项目详情", format);
         return result;

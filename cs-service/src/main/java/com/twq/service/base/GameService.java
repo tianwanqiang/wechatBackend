@@ -7,6 +7,7 @@ import com.twq.dao.model.GamesExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -101,5 +102,20 @@ public class GameService {
         where.andUserIdEqualTo(userId);
         List<Games> games = gamesMapper.selectByExample(example);
         return games;
+    }
+
+
+    /**
+     * 根据用户id和游戏时间获取挑战记录
+     *
+     * @param userId
+     */
+    public List<Games> getTomorrowUserGameInfoByUid(String userId) {
+
+        Calendar instance = Calendar.getInstance();
+        instance.add(Calendar.DATE, 1);
+        DateFormat df = new SimpleDateFormat("yyyyMMdd");
+        String format = df.format(instance.getTime());
+        return getUserGameInfoByUidAndParyTime(userId, format);
     }
 }
