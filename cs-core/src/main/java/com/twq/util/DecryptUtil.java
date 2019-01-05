@@ -2,16 +2,20 @@ package com.twq.util;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
+import javax.crypto.Mac;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.Security;
+import java.io.UnsupportedEncodingException;
+import java.security.*;
 import java.util.Arrays;
 
+/**
+ * 加解密工具类
+ */
 public class DecryptUtil {
     // 算法名称
     final String KEY_ALGORITHM = "AES";
@@ -39,12 +43,14 @@ public class DecryptUtil {
         key = new SecretKeySpec(keyBytes, KEY_ALGORITHM);
         try {
             // 初始化cipher
-            cipher = Cipher.getInstance(algorithmStr);
+            cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
         } catch (NoSuchAlgorithmException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (NoSuchPaddingException e) {
             // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NoSuchProviderException e) {
             e.printStackTrace();
         }
     }
@@ -74,6 +80,38 @@ public class DecryptUtil {
             e.printStackTrace();
         }
         return encryptedText;
+    }
+
+
+    public String EncoderByMd5(String str) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        //确定计算方法
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        BASE64Encoder base64en = new BASE64Encoder();
+        //加密后的字符串
+        String newstr = base64en.encode(md5.digest(str.getBytes("utf-8")));
+        return newstr;
+    }
+
+
+    public String EncoderByHmacSHA1(String data, String key) throws Exception {
+        byte[] keyBytes = key.getBytes();
+        SecretKeySpec signingKey = new SecretKeySpec(keyBytes, "HmacSHA1");
+        Mac mac = Mac.getInstance("HmacSHA1");
+        mac.init(signingKey);
+        byte[] rawHmac = mac.doFinal(data.getBytes());
+        StringBuilder sb = new StringBuilder();
+        for (byte b : rawHmac) {
+            sb.append(byteToHexString(b));
+        }
+        return sb.toString();
+    }
+
+    private String byteToHexString(byte ib) {
+        char[] Digit = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+        char[] ob = new char[2];
+        ob[0] = Digit[(ib >>> 4) & 0X0f];
+        ob[1] = Digit[ib & 0X0F];
+        return new String(ob);
     }
 
 }
