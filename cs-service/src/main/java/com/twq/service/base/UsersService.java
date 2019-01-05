@@ -6,6 +6,8 @@ import com.twq.dao.mapper.UserWalletMapper;
 import com.twq.dao.model.*;
 import com.twq.util.Constants;
 import com.twq.util.SnowflakeIdWorker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.*;
 @Service
 public class UsersService {
 
+    Logger logger = LoggerFactory.getLogger(UsersService.class);
     @Autowired
     private UserInfoMapper userInfoMapper;
     @Autowired
@@ -108,6 +111,7 @@ public class UsersService {
         result.put("head_img", userInfoByOpenId.getAvaUrl());
         result.put("name", userInfoByOpenId.getNickName());
         result.put("id", userInfoByOpenId.getId());
+        result.put("openid", userInfoByOpenId.getOpenId());
 
         return result;
 
@@ -141,5 +145,39 @@ public class UsersService {
         example.createCriteria().andIdEqualTo(userId);
         List<UserInfo> userInfos = userInfoMapper.selectByExample(example);
         return userInfos == null ? null : userInfos.get(0) == null ? null : userInfos.get(0);
+    }
+
+    public Map<String, Object> sigatureUser(String user_id, String token, String openid) {
+        Calendar instance = Calendar.getInstance();
+        Map<String, Object> result = new HashMap<>();
+        UserInfoExample example = new UserInfoExample();
+        example.createCriteria().andIdEqualTo(user_id);
+        List<UserInfo> userInfos = userInfoMapper.selectByExample(example);
+        if (userInfos != null && userInfos.size() > 0) {
+            UserInfo userInfo = userInfos.get(0);
+            String token1 = userInfo.getToken();
+            String openId = userInfo.getOpenId();
+            if (token1 != null && token.equals(token1)) {
+                result.put("timeStamp", System.nanoTime());
+                result.put("nonceStr", UUID.randomUUID().toString().substring(0, 23));
+                result.put("package", "package");
+                result.put("signType", "MD5");
+                result.put("success", "1");
+                return result;
+            } else {
+                result.put("msg", "签名校验失败");
+                result.put("success", "0");
+                logger.error("{}=====>签名校验失败,token错误", instance.getTime().toLocaleString());
+                return result;
+            }
+
+        } else {
+            result.put("msg", "请求参数错误");
+            result.put("success", "0");
+            logger.error("{}=====>请求参数错误", instance.getTime().toLocaleString());
+            return result;
+        }
+
+
     }
 }

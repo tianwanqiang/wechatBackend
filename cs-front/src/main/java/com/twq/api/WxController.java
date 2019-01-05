@@ -8,6 +8,7 @@ import com.twq.service.business.WxService;
 import com.twq.util.Constants;
 import com.twq.util.DecryptUtil;
 import com.twq.util.Nodes;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,4 +120,37 @@ public class WxController {
         return result;
 
     }
+
+    public static void main(String[] args) {
+        String encrypted = "zbTEZ6/iqHU6kQzEOLJ48spis3yxy51xirtzLvY4BeYymZVGg9m1TNSZGt6sEhlQ/wKhne9KNXRO9MPmljRPlFdxAl5dLhZncvoG4q6gEbdztu7ePNvhvCmZWPEC+HZ0+yai+RPKr6/LjMpFwtzKNpeRfyl8tO4f0/WjEZp4ZAVZx5lseVVmViW0hGQ1Ra9ko9BR2kVOd6sPvO00RjnivA/na6av30hUBCppL77xWx5RP8m+zpH772iBwRlJDyRbk+1iAIXPiirymbinol+kLUaY1+kVcHadkl6nozl7ZMK6omNw3D05JvDgUd1h1dxPh42V0Jzms1P8ZOmILn+RvD+GLM18DXYtTEd+7RiRChx9ygPZfy6Oa4kLzcde8tfzRJu36Wd4HN3vpNY69FLDwuGyF9M1XC4/6ut1fVtm3TCh7kxkEo7RnAqR0dGfrpBIzXmvakC7wkw7czMtgf23qSbPqhEo3fReUjTYX8F0SWo=";
+        String session_key = "IOW1ppK5/nrA1oRBLLZWqg==";
+        String iv = "EWaybC4ks74iFu7VCpiXvQ==";
+        byte[] decrypt = new DecryptUtil().decrypt(encrypted, session_key, iv);
+        System.out.println(decrypt);
+    }
+
+    /**
+     * user_id: o.id,
+     * token: o.token,
+     * openid: o.openid
+     */
+    @RequestMapping(path = "/signature", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Map<String, Object> signatureMove(@RequestParam("user_id") String user_id, @RequestParam("token") String token, @RequestParam("openid") String openid) {
+        Map<String, Object> result = new HashMap<>();
+
+        //1.生成后台订单
+        //2.调用接口，获取统一下单接口返回的 prepay_id 参数值
+
+
+        if (StringUtils.isBlank(user_id) || StringUtils.isBlank(token) || StringUtils.isBlank(openid)) {
+            return null;
+        } else {
+            result = usersService.sigatureUser(user_id, token, openid);
+        }
+        return result;
+
+
+    }
+
+
 }

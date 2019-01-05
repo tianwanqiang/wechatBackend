@@ -31,6 +31,10 @@ public class Nodes {
     public static final String APPSEC = "appSec";
     public static final String APPKEY = "appKey";
     public static final String DATA = "data";
+    public static final String MCH_ID = "mch_id";
+    public static final String MCH_SEC = "mch_sec";
+    public static final String PRE_REQUEST_URL = "pre_request_url";
+    public static final String ORDER_NOTIFY_URL = "order_notify_url";
 
 
 }
